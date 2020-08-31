@@ -4,7 +4,6 @@ import interfaces.Flyable;
 
 public class AircraftFactory {
 	public static Flyable newAircraft(String type, String name, int longitude, int latitude, int height) {
-		// What to do?
 		Coordinates coordinates = new Coordinates(longitude, latitude, height);
 
 		switch (type) {
@@ -17,8 +16,6 @@ public class AircraftFactory {
 
 			default:
 				return (null);
-				// System.out.println("Unrecognized Aircraft.");
-				// System.exit(1);
 		}
 	}
 }

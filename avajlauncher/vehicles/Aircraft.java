@@ -8,15 +8,12 @@ public abstract class Aircraft {
 
     // Constructor
     protected Aircraft(String name, Coordinates coordinates) {
-		// What to do?
 		this.id = nextId();
 		this.name = name;
 		this.coordinates = coordinates;
     }
 
-    // Methods
     private long nextId() {
-		// What to do?
 		return (++idCounter);
     }
 }
