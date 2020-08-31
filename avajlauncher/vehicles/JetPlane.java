@@ -1,58 +1,69 @@
 package vehicles;
 
+import java.io.IOException;
+
 import interfaces.Flyable;
 import weatherTower.WeatherTower;
 
 public class JetPlane extends Aircraft implements Flyable {
-    private WeatherTower weatherTower;
+	private WeatherTower weatherTower;
 
-    // Constructor
-    public JetPlane(String name, Coordinates coordinates) {
+	// Constructor
+	public JetPlane(String name, Coordinates coordinates) {
 		super(name, coordinates);
-    }
+	}
 
-    public void updateConditions() {
+	public void updateConditions() {
 		String weather = this.weatherTower.getWeather(coordinates);
-		
-		// TODO: Output to a file
-		switch(weather) {
-			case "SUN":
-			this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-								this.coordinates.getLatitide() + 10,
-								this.coordinates.getHeight() + 2);
-			System.out.println("JetPlane#" + this.name + "(" + this.id + "): " + "I'm the maverick around here.");
-			break;
-			case "RAIN":
-			this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-								this.coordinates.getLatitide() + 5,
-								this.coordinates.getHeight());
-			System.out.println("JetPlane#" + this.name + "(" + this.id + "): " + "I think we going to fast.");
-			break;
-			case "FOG":
-			this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-								this.coordinates.getLatitide() + 1,
-								this.coordinates.getHeight());
-			System.out.println("JetPlane#" + this.name + "(" + this.id + "): " + "It's a good day to die.");
-			break;
-			case "SNOW":
-			this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-								this.coordinates.getLatitide(),
-								this.coordinates.getHeight() - 7);
-			System.out.println("JetPlane#" + this.name + "(" + this.id + "): " + "It's all so white and fluffy.");
 
-			default:
-			break;
+		try {
+			switch (weather) {
+				case "SUN":
+					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+							this.coordinates.getLatitide() + 10, this.coordinates.getHeight() + 2);
+					simulator.Simulator.newFile
+							.write("JetPlane#" + this.name + "(" + this.id + "): " + "I'm the maverick around here.\n");
+					break;
+				case "RAIN":
+					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+							this.coordinates.getLatitide() + 5, this.coordinates.getHeight());
+					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "I think we going to fast.\n");
+					break;
+				case "FOG":
+					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+							this.coordinates.getLatitide() + 1, this.coordinates.getHeight());
+					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "It's a good day to die.\n");
+					break;
+				case "SNOW":
+					this.coordinates = new Coordinates(this.coordinates.getLongitude(), this.coordinates.getLatitide(),
+							this.coordinates.getHeight() - 7);
+					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "It's all so white and fluffy.\n");
+
+				default:
+					break;
+			}
+
+			if (this.coordinates.getHeight() <= 0) {
+				this.weatherTower.unregister(this);
+				simulator.Simulator.newFile.write(
+						"Tower says: JetPlane#" + this.name + "(" + this.id + ") unregister from weather tower.\n");
+			}
+		} catch (IOException e) {
+			System.out.println("Error writing to simulation.txt");
+			System.exit(1);
 		}
+	}
 
-		if (this.coordinates.getHeight() <= 0) {
-			this.weatherTower.unregister(this);
-			System.out.println("Tower says: JetPlane#" + this.name + "(" + this.id + ") unregister from weather tower.");
-		}
-    }
-
-    public void registerTower(WeatherTower weatherTower) {
+	public void registerTower(WeatherTower weatherTower) {
 		this.weatherTower = weatherTower;
 		this.weatherTower.register(this);
-		System.out.println("Tower says: JetPlane" + "#" + this.name + "(" + this.id + ") registered to weather tower.");
-    }
+
+		try {
+			simulator.Simulator.newFile.write(
+					"Tower says: JetPlane" + "#" + this.name + "(" + this.id + ") registered to weather tower.\n");
+		} catch (IOException e) {
+			System.out.println("Error writing to simulation.txt");
+			System.exit(1);
+		}
+	}
 }

@@ -5,21 +5,33 @@ import vehicles.AircraftFactory;
 import weatherTower.WeatherTower;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.List;
+
 import java.util.ArrayList;
 
 public class Simulator {
 	private static WeatherTower weatherTower = new WeatherTower();
 	private static List<Flyable> flyables = new ArrayList<>();
+	public static BufferedWriter newFile = null;
 
 	public static void main(String[] args) {
 		BufferedReader file = null;
 		String line = null;
 		int simulation = 0;
+
+		try {
+			newFile = new BufferedWriter(new FileWriter("simulation.txt"));
+		} catch (IOException e) {
+			System.out.println("Error creating simulation.txt");
+			System.exit(1);
+		} finally {
+			
+		}
 
 		try {
 			file = new BufferedReader(new FileReader(args[0]));
@@ -29,7 +41,8 @@ public class Simulator {
 				try {
 					simulation = Integer.parseInt(line);
 				} catch (NumberFormatException e) {
-					System.out.println("Simulation runtime Number must be an integer " + e.getMessage() + " in scenario file.");
+					System.out.println(
+							"Simulation runtime Number must be an integer " + e.getMessage() + " in scenario file.");
 					System.exit(1);
 				}
 				if (simulation <= 0) {
@@ -67,7 +80,7 @@ public class Simulator {
 			System.out.println("There was an error while reading the file: " + args[0]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("No simulation file found.");
-		// } catch (Exception e) {
+			// } catch (Exception e) {
 			// System.out.println("Exception: " + e);
 			// System.out.println("Exception was unfortunately unforseen, Oops.");
 		} finally {
@@ -76,6 +89,13 @@ public class Simulator {
 					file.close();
 			} catch (IOException e) {
 				System.out.println("There was an error closing the file: " + args[0]);
+			}
+			try {
+				if (newFile != null)
+					newFile.close();
+			} catch (IOException e) {
+				System.out.println("Error closing the simulation.txt");
+				System.exit(1);
 			}
 		}
 		// Flyable flyable = new AircraftFactory().newAircraft(type, name, longitude,
