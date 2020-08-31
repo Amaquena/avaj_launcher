@@ -9,7 +9,7 @@ public class AircraftFactory {
 		switch (type) {
 			case "Baloon":
 				return (new Baloon(name, coordinates));
-			case "Jetplane":
+			case "JetPlane":
 				return (new JetPlane(name, coordinates));
 			case "Helicopter":
 				return (new Helicopter(name, coordinates));
