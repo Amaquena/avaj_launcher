@@ -4,6 +4,10 @@
 # Log file
 *.log
 
+# txt
+simulation.txt
+sources.txt
+
 # BlueJ files
 *.ctxt
 *.bluej
