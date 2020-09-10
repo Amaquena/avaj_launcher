@@ -1,6 +1,0 @@
-./interfaces/Flyable.class
-./simulator/Simulator.class
-./vehicles/Aircraft.class
-./vehicles/AircraftFactory.class
-./vehicles/Baloon.class
-./vehicles/Coordinates.class

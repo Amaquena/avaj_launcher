@@ -17,36 +17,40 @@ public class JetPlane extends Aircraft implements Flyable {
 		String weather = this.weatherTower.getWeather(coordinates);
 
 		try {
-			switch (weather) {
-				case "SUN":
-					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-							this.coordinates.getLatitide() + 10, this.coordinates.getHeight() + 2);
-					simulator.Simulator.newFile
-							.write("JetPlane#" + this.name + "(" + this.id + "): " + "I'm the maverick around here.\n");
-					break;
-				case "RAIN":
-					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-							this.coordinates.getLatitide() + 5, this.coordinates.getHeight());
-					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "I think we going to fast.\n");
-					break;
-				case "FOG":
-					this.coordinates = new Coordinates(this.coordinates.getLongitude(),
-							this.coordinates.getLatitide() + 1, this.coordinates.getHeight());
-					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "It's a good day to die.\n");
-					break;
-				case "SNOW":
-					this.coordinates = new Coordinates(this.coordinates.getLongitude(), this.coordinates.getLatitide(),
-							this.coordinates.getHeight() - 7);
-					simulator.Simulator.newFile.write("JetPlane#" + this.name + "(" + this.id + "): " + "It's all so white and fluffy.\n");
-
-				default:
-					break;
-			}
-
 			if (this.coordinates.getHeight() <= 0) {
 				this.weatherTower.unregister(this);
 				simulator.Simulator.newFile.write(
 						"Tower says: JetPlane#" + this.name + "(" + this.id + ") unregister from weather tower.\n");
+			} else {
+				switch (weather) {
+					case "SUN":
+						this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+								this.coordinates.getLatitide() + 10, this.coordinates.getHeight() + 2);
+						simulator.Simulator.newFile.write(
+								"JetPlane#" + this.name + "(" + this.id + "): " + "I'm the maverick around here.\n");
+						break;
+					case "RAIN":
+						this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+								this.coordinates.getLatitide() + 5, this.coordinates.getHeight());
+						simulator.Simulator.newFile
+								.write("JetPlane#" + this.name + "(" + this.id + "): " + "I think we going to fast.\n");
+						break;
+					case "FOG":
+						this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+								this.coordinates.getLatitide() + 1, this.coordinates.getHeight());
+						simulator.Simulator.newFile
+								.write("JetPlane#" + this.name + "(" + this.id + "): " + "It's a good day to die.\n");
+						break;
+					case "SNOW":
+						this.coordinates = new Coordinates(this.coordinates.getLongitude(),
+								this.coordinates.getLatitide(), this.coordinates.getHeight() - 7);
+						simulator.Simulator.newFile.write(
+								"JetPlane#" + this.name + "(" + this.id + "): " + "It's all so white and fluffy.\n");
+
+					default:
+						break;
+				}
+
 			}
 		} catch (IOException e) {
 			System.out.println("Error writing to simulation.txt");

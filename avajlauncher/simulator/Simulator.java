@@ -24,13 +24,16 @@ public class Simulator {
 		String line = null;
 		int simulation = 0;
 
+		if (args.length != 1) {
+			System.err.println("Only takes one argument");
+			System.exit(1);
+		}
+
 		try {
 			newFile = new BufferedWriter(new FileWriter("simulation.txt"));
 		} catch (IOException e) {
-			System.out.println("Error creating simulation.txt");
+			System.err.println("Error creating simulation.txt");
 			System.exit(1);
-		} finally {
-			
 		}
 
 		try {
@@ -41,7 +44,7 @@ public class Simulator {
 				try {
 					simulation = Integer.parseInt(line);
 				} catch (NumberFormatException e) {
-					System.out.println(
+					System.err.println(
 							"Simulation runtime Number must be an integer " + e.getMessage() + " in scenario file.");
 					System.exit(1);
 				}
@@ -57,14 +60,21 @@ public class Simulator {
 							Integer.parseInt(line.split(" ")[2]), Integer.parseInt(line.split(" ")[3]),
 							Integer.parseInt(line.split(" ")[4]));
 					if (flyable == null) {
-						System.out.println("Invalid Aircraft in scenario file.");
+						System.err.println("Invalid Aircraft in scenario file.");
 						System.exit(1);
 					}
 					flyables.add(flyable);
 				} catch (NumberFormatException e) {
-					System.out.println(e.getMessage() + " in scenario file. It must be of type integer.");
+					System.err.println(e.getMessage() + " in scenario file. It must be of type integer.");
+					System.exit(1);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.err.println("file format incorrect");
 					System.exit(1);
 				}
+			}
+			if (flyables.isEmpty()) {
+				System.err.println("No aircrafts in scenario file");
+				System.exit(1);
 			}
 
 			for (Flyable flyable : flyables) {
@@ -75,30 +85,26 @@ public class Simulator {
 			}
 
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found: " + args[0]);
+			System.err.println("File not found: " + args[0]);
 		} catch (IOException e) {
-			System.out.println("There was an error while reading the file: " + args[0]);
+			System.err.println("There was an error while reading the file: " + args[0]);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("No simulation file found.");
-			// } catch (Exception e) {
-			// System.out.println("Exception: " + e);
-			// System.out.println("Exception was unfortunately unforseen, Oops.");
+			System.err.println("No simulation file found.");
+		} catch (Exception e) {
+			System.err.println("Exception was unfortunately unforseen, Oops.");
 		} finally {
 			try {
 				if (file != null)
 					file.close();
 			} catch (IOException e) {
-				System.out.println("There was an error closing the file: " + args[0]);
+				System.err.println("There was an error closing the file: " + args[0]);
 			}
 			try {
 				if (newFile != null)
 					newFile.close();
 			} catch (IOException e) {
-				System.out.println("Error closing the simulation.txt");
-				System.exit(1);
+				System.err.println("Error closing the simulation.txt");
 			}
 		}
-		// Flyable flyable = new AircraftFactory().newAircraft(type, name, longitude,
-		// latitude, height)
 	}
 }

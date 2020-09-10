@@ -7,6 +7,9 @@ public class Coordinates {
 
 	// Constructor
 	public Coordinates(int longitude, int latitude, int height) {
+		if (height > 100) {
+			height = 100;
+		}
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.height = height;
